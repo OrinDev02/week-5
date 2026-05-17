@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Registration Form</h1>
+        <form id="registrationForm">
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    placeholder="Enter your full name"
+                    autocomplete="off"
+                >
+                <div class="error-message" id="nameError"></div>
+                <div class="success-icon" id="nameSuccess">✓ Valid name</div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="Enter your email address"
+                    autocomplete="off"
+                >
+                <div class="error-message" id="emailError"></div>
+                <div class="success-icon" id="emailSuccess">✓ Valid email</div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Enter password (min 6 characters)"
+                    autocomplete="off"
+                >
+                <div class="error-message" id="passwordError"></div>
+                <div class="success-icon" id="passwordSuccess">✓ Valid password</div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submitBtn" disabled>Register</button>
+        </form>
+    </div>
+
+    <script>
+        // Get form elements
+        const form = document.getElementById('registrationForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Get error and success elements
+        const nameError = document.getElementById('nameError');
+        const nameSuccess = document.getElementById('nameSuccess');
+        const emailError = document.getElementById('emailError');
+        const emailSuccess = document.getElementById('emailSuccess');
+        const passwordError = document.getElementById('passwordError');
+        const passwordSuccess = document.getElementById('passwordSuccess');
+
+        // Validation state
+        const validation = {
+            name: false,
+            email: false,
+            password: false
+        };
+
+        // Validate Name
+        function validateName(value) {
+            if (value.trim() === '') {
+                nameError.textContent = 'Name is required';
+                nameError.classList.add('show');
+                nameSuccess.classList.remove('show');
+                nameInput.classList.remove('valid');
+                nameInput.classList.add('invalid');
+                validation.name = false;
+            } else {
+                nameError.classList.remove('show');
+                nameSuccess.classList.add('show');
+                nameInput.classList.remove('invalid');
+                nameInput.classList.add('valid');
+                validation.name = true;
+            }
+            updateSubmitButton();
+        }
+
+        // Validate Email
+        function validateEmail(value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (value.trim() === '') {
+                emailError.textContent = 'Email is required';
+                emailError.classList.add('show');
+                emailSuccess.classList.remove('show');
+                emailInput.classList.remove('valid');
+                emailInput.classList.add('invalid');
+                validation.email = false;
+            } else if (!emailRegex.test(value)) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.add('show');
+                emailSuccess.classList.remove('show');
+                emailInput.classList.remove('valid');
+                emailInput.classList.add('invalid');
+                validation.email = false;
+            } else {
+                emailError.classList.remove('show');
+                emailSuccess.classList.add('show');
+                emailInput.classList.remove('invalid');
+                emailInput.classList.add('valid');
+                validation.email = true;
+            }
+            updateSubmitButton();
+        }
+
+        // Validate Password
+        function validatePassword(value) {
+            if (value === '') {
+                passwordError.textContent = 'Password is required';
+                passwordError.classList.add('show');
+                passwordSuccess.classList.remove('show');
+                passwordInput.classList.remove('valid');
+                passwordInput.classList.add('invalid');
+                validation.password = false;
+            } else if (value.length < 6) {
+                passwordError.textContent = `Password must be at least 6 characters (${value.length}/6)`;
+                passwordError.classList.add('show');
+                passwordSuccess.classList.remove('show');
+                passwordInput.classList.remove('valid');
+                passwordInput.classList.add('invalid');
+                validation.password = false;
+            } else {
+                passwordError.classList.remove('show');
+                passwordSuccess.classList.add('show');
+                passwordInput.classList.remove('invalid');
+                passwordInput.classList.add('valid');
+                validation.password = true;
+            }
+            updateSubmitButton();
+        }
+
+        // Update submit button state
+        function updateSubmitButton() {
+            if (validation.name && validation.email && validation.password) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        // Event listeners for real-time validation
+        nameInput.addEventListener('input', (e) => {
+            validateName(e.target.value);
+        });
+
+        emailInput.addEventListener('input', (e) => {
+            validateEmail(e.target.value);
+        });
+
+        passwordInput.addEventListener('input', (e) => {
+            validatePassword(e.target.value);
+        });
+
+        // Handle form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Final validation before submission
+            validateName(nameInput.value);
+            validateEmail(emailInput.value);
+            validatePassword(passwordInput.value);
+
+            if (validation.name && validation.email && validation.password) {
+                alert(`Registration successful!\n\nName: ${nameInput.value}\nEmail: ${emailInput.value}`);
+                // Reset form
+                form.reset();
+                nameInput.classList.remove('valid');
+                emailInput.classList.remove('valid');
+                passwordInput.classList.remove('valid');
+                nameSuccess.classList.remove('show');
+                emailSuccess.classList.remove('show');
+                passwordSuccess.classList.remove('show');
+                validation.name = false;
+                validation.email = false;
+                validation.password = false;
+                updateSubmitButton();
+            }
+        });
+
+        // Initial submit button state
+        updateSubmitButton();
+    </script>
+</body>
+</html>

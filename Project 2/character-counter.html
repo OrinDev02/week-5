@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter</title>
+    <link rel="stylesheet" href="counter-styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Character Counter</h1>
+        <p class="subtitle">Type your message and watch the character counter in real-time</p>
+        
+        <div class="form-group">
+            <label for="messageTextarea">Message</label>
+            <div class="textarea-wrapper">
+                <textarea 
+                    id="messageTextarea" 
+                    class="message-textarea"
+                    placeholder="Type your message here... (200 characters max)"
+                    maxlength="200"
+                ></textarea>
+            </div>
+            
+            <!-- Character Counter Display -->
+            <div class="counter-display">
+                <div class="counter-info">
+                    <span class="char-count"><span id="currentCount">0</span>/200 characters</span>
+                </div>
+            </div>
+
+            <!-- Remaining Characters -->
+            <div class="remaining-info">
+                <span id="remainingText" class="remaining-text">200 characters remaining</span>
+            </div>
+
+            <!-- Warning Message -->
+            <div id="warningMessage" class="warning-message"></div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="statistics">
+                <div class="stat-item">
+                    <span class="stat-label">Characters Used:</span>
+                    <span class="stat-value" id="usedCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Characters Remaining:</span>
+                    <span class="stat-value" id="remainingCount">200</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Percentage Used:</span>
+                    <span class="stat-value" id="percentageUsed">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const textarea = document.getElementById('messageTextarea');
+        const currentCountSpan = document.getElementById('currentCount');
+        const remainingText = document.getElementById('remainingText');
+        const warningMessage = document.getElementById('warningMessage');
+        const progressBar = document.getElementById('progressBar');
+        const usedCount = document.getElementById('usedCount');
+        const remainingCount = document.getElementById('remainingCount');
+        const percentageUsed = document.getElementById('percentageUsed');
+
+        // Constants
+        const MAX_CHARACTERS = 200;
+        const WARNING_THRESHOLD = 180; // Show warning at 90% capacity
+
+        // Handle input event
+        textarea.addEventListener('input', (e) => {
+            const currentLength = e.target.value.length;
+            const remaining = MAX_CHARACTERS - currentLength;
+            const percentage = Math.round((currentLength / MAX_CHARACTERS) * 100);
+
+            // Update character count display
+            currentCountSpan.textContent = currentLength;
+            usedCount.textContent = currentLength;
+            remainingCount.textContent = remaining;
+            percentageUsed.textContent = percentage + '%';
+
+            // Update remaining text
+            if (remaining === 1) {
+                remainingText.textContent = '1 character remaining';
+            } else if (remaining === 0) {
+                remainingText.textContent = 'Character limit reached!';
+            } else {
+                remainingText.textContent = `${remaining} characters remaining`;
+            }
+
+            // Update progress bar
+            progressBar.style.width = percentage + '%';
+            progressBar.classList.remove('warning', 'danger');
+
+            // Update warning message and colors based on usage
+            if (currentLength === 0) {
+                warningMessage.textContent = '';
+                warningMessage.classList.remove('show');
+                textarea.classList.remove('warning-state', 'danger-state');
+                remainingText.classList.remove('warning-text', 'danger-text');
+                progressBar.classList.remove('warning', 'danger');
+            } else if (currentLength >= MAX_CHARACTERS) {
+                // Limit reached
+                warningMessage.textContent = '⚠️ Character limit reached! No more characters can be added.';
+                warningMessage.classList.add('show');
+                textarea.classList.remove('warning-state');
+                textarea.classList.add('danger-state');
+                remainingText.classList.remove('warning-text');
+                remainingText.classList.add('danger-text');
+                progressBar.classList.add('danger');
+            } else if (currentLength > WARNING_THRESHOLD) {
+                // Warning threshold exceeded
+                warningMessage.textContent = `⚠️ Warning: You've used ${percentage}% of the character limit!`;
+                warningMessage.classList.add('show');
+                textarea.classList.add('warning-state');
+                textarea.classList.remove('danger-state');
+                remainingText.classList.add('warning-text');
+                remainingText.classList.remove('danger-text');
+                progressBar.classList.add('warning');
+            } else {
+                // All good
+                warningMessage.textContent = '';
+                warningMessage.classList.remove('show');
+                textarea.classList.remove('warning-state', 'danger-state');
+                remainingText.classList.remove('warning-text', 'danger-text');
+                progressBar.classList.remove('warning', 'danger');
+            }
+        });
+
+        // Prevent exceeding character limit on paste
+        textarea.addEventListener('paste', (e) => {
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const currentLength = textarea.value.length;
+            
+            if (currentLength + pastedText.length > MAX_CHARACTERS) {
+                e.preventDefault();
+                warningMessage.textContent = '⚠️ Pasted text would exceed the character limit!';
+                warningMessage.classList.add('show');
+                setTimeout(() => {
+                    warningMessage.classList.remove('show');
+                }, 3000);
+            }
+        });
+
+        // Initialize display
+        textarea.dispatchEvent(new Event('input'));
+    </script>
+</body>
+</html>

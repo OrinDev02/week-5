@@ -1,0 +1,232 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #7373d7 0%, #160578 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 32px;
+}
+
+.subtitle {
+    color: #777;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 12px;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.textarea-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.message-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    resize: vertical;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    outline: none;
+}
+
+.message-textarea:focus {
+    border-color: #667eea;
+    background-color: #f8f9ff;
+}
+
+.message-textarea.warning-state {
+    border-color: #f39c12;
+    background-color: #fffbf0;
+}
+
+.message-textarea.danger-state {
+    border-color: #e74c3c;
+    background-color: #fadbd8;
+}
+
+/* Counter Display */
+.counter-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.counter-info {
+    flex: 1;
+}
+
+.char-count {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+}
+
+/* Remaining Information */
+.remaining-info {
+    margin-bottom: 15px;
+}
+
+.remaining-text {
+    font-size: 14px;
+    color: #27ae60;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.remaining-text.warning-text {
+    color: #f39c12;
+}
+
+.remaining-text.danger-text {
+    color: #e74c3c;
+}
+
+/* Warning Message */
+.warning-message {
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    background-color: #fef5e7;
+    border: 1px solid #f39c12;
+    border-radius: 6px;
+    color: #d68910;
+    font-size: 13px;
+    font-weight: 500;
+    display: none;
+    animation: slideIn 0.3s ease;
+}
+
+.warning-message.show {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.2s ease;
+    border-radius: 10px;
+}
+
+.progress-bar.warning {
+    background: linear-gradient(90deg, #f39c12, #e67e22);
+}
+
+.progress-bar.danger {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+}
+
+/* Statistics */
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 2px solid #ecf0f1;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.stat-item:hover {
+    background-color: #ecf0f1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    display: block;
+    font-size: 24px;
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .message-textarea {
+        min-height: 120px;
+    }
+}
